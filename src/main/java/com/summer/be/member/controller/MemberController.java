@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -24,7 +26,29 @@ public class MemberController {
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
 
+    @PostMapping("/signup")
+    public ResponseEntity<?> signUp(@RequestBody MemberDto memberDto) {
+        try {
+            memberService.signUp(memberDto.getEmail(), memberDto.getPassword());
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/check_email")
+    public ResponseEntity<?> checkEmail(@RequestBody Map<String, String> requestBody) {
+        String email = requestBody.get("email");
+        boolean emailExists = memberService.checkEmail(email);
+        if (emailExists) {
+            log.info("Email already exists: " + email);
+            return ResponseEntity.badRequest().body("Email already exists");
+        } else {
+            log.info("Email is available: " + email);
+            return ResponseEntity.ok().build();
+        }
     }
 
 }
