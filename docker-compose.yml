@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  mysqldb:
+    image: mysql:latest
+    restart: always
+    hostname: mysqldb
+    environment:
+      MYSQL_DATABASE: summer
+      MYSQL_ROOT_PASSWORD: 1224
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db/mysql/data:/var/lib/mysql
+      - ./db/mysql/init:/docker-entrypoint-initdb.d
+
+  backend:
+    #image: yuntaehyeon/newsProject #docker hub에 올릴 때
+    build:
+      context: .
+      dockerfile: Dockerfile #image 사용하면 주석처리
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysqldb
+    command:
+      - bash
+      - -c
+      - |
+        ./wait-for-it.sh mysqldb:3306 -s -t 100
+        java -jar /app.jar
+
+    #apt install -y python3-pip 파이썬 개발 완료 후 사용
