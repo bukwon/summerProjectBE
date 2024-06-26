@@ -3,6 +3,8 @@ data.rest:
   detection-strategy: annotated
 
 spring:
+  profiles:
+    include: private
   jackson:
     serialization:
       FAIL_ON_EMPTY_BEANS: false
@@ -10,9 +12,9 @@ spring:
     serialization-inclusion: non_null
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mysqldb:3306/summer?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/summer?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     username: root
-    password: 1224
+    password: lidj123414
   jpa:
     hibernate:
       ddl-auto: create-drop
