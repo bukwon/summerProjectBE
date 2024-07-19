@@ -38,3 +38,6 @@ out/
 
 ### mysql
 db/mysql/
+
+# Ignore application-private.yml
+application-private.yml
