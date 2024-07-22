@@ -15,7 +15,7 @@
 - [윤태현](https://github.com/YunTaeHyeon)
 - [김부권](https://github.com/bukwon)
 - [송치윤](https://github.com/heychi)
-
+- [탁경진](https://github.com/Takkyoui)
 ### 기술 스택
 - 백엔드
   - Spring
