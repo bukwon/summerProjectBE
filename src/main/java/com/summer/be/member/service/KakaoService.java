@@ -2,8 +2,10 @@ package com.summer.be.member.service;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.summer.be.member.domain.KakaoMember;
 import com.summer.be.member.domain.SocialProperties;
 import com.summer.be.member.domain.dto.KakaoDto;
+import com.summer.be.member.repository.KakaoMemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
@@ -22,6 +24,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KakaoService {
     private final SocialProperties socialProperties;
+    private final KakaoMemberRepository kakaoMemberRepository;
 
     private static String clientKey;
     private static String kakaoRedirectUri;
@@ -115,12 +118,24 @@ public class KakaoService {
 
             String email = kakaoAccount.get("email").toString();
 
-            return KakaoDto.builder()
+            KakaoDto kakaoDto =  KakaoDto.builder()
                     .id(Long.valueOf(id))
                     .email(email)
                     .nickname(nickname)
                     .profileImg(profileImg)
                     .build();
+
+            KakaoMember kakaoMember = KakaoMember.builder()
+                    .id(Long.valueOf(id))
+                    .email(email)
+                    .nickname(nickname)
+                    .profileImg(profileImg)
+                    .build();
+
+            kakaoMemberRepository.save(kakaoMember);
+
+            return kakaoDto;
+
 
         } catch (IOException | ParseException e) {
             e.printStackTrace();

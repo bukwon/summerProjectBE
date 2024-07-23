@@ -14,7 +14,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/summer?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     username: root
-    password: lidj123414
+    password: 1224
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -30,3 +30,19 @@ spring:
         default_batch_fetch_size: 100
 server:
   port: 8080
+
+springdoc:
+  version: '@project.version@'
+  api-docs:
+    path: /api-docs
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  swagger-ui:
+    operations-sorter: alpha
+    tags-sorter: alpha
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    display-query-params-without-oauth2: true
+    doc-expansion: none
+  paths-to-match:
+    - /api/**
