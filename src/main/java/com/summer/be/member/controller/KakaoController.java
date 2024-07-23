@@ -29,7 +29,6 @@ public class KakaoController {
             responseCode = "200",
             description = "회원가입에 성공하였습니다."
     )
-
     @RequestMapping("/login/oauth2/code/kakao")
     public String kakaoLogin(@RequestParam("code") String code) throws IOException {
         // 1. 인가 코드 받기 (@RequestParam String code)
