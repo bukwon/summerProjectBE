@@ -18,16 +18,15 @@ public class KakaoMember {
     private Long id;
     @Column(nullable = false)
     private String nickname;
-    @Column(nullable = false)
-    private String profileImg;
+    //@Column(nullable = false)
+    //private String profileImg;
     @Column(nullable = false)
     private String email;
 
     @Builder
-    public KakaoMember(Long id, String nickname, String profileImg, String email) {
+    public KakaoMember(Long id, String nickname, String email) {
         this.id = id;
         this.nickname = nickname;
-        this.profileImg = profileImg;
         this.email = email;
     }
 }

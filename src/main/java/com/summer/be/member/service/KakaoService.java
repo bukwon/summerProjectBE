@@ -112,9 +112,9 @@ public class KakaoService {
             JSONObject kakaoAccount = (JSONObject) obj.get("kakao_account");
             String id = obj.get("id").toString();
             String nickname = properties.get("nickname").toString();
-            Object profileImgObject = properties.get("profile_image");
-            String profileImg = (profileImgObject != null) ? profileImgObject.toString() :
-                    null;  // 프로필 이미지 동의 안할 시 null 값 대신 기본 logo.png로 대체
+            //Object profileImgObject = properties.get("profile_image");
+            //String profileImg = (profileImgObject != null) ? profileImgObject.toString() :
+            //        null;  // 프로필 이미지 동의 안할 시 null 값 대신 기본 logo.png로 대체
 
             String email = kakaoAccount.get("email").toString();
 
@@ -122,14 +122,14 @@ public class KakaoService {
                     .id(Long.valueOf(id))
                     .email(email)
                     .nickname(nickname)
-                    .profileImg(profileImg)
+                    //.profileImg(profileImg)
                     .build();
 
             KakaoMember kakaoMember = KakaoMember.builder()
                     .id(Long.valueOf(id))
                     .email(email)
                     .nickname(nickname)
-                    .profileImg(profileImg)
+                    //.profileImg(profileImg)
                     .build();
 
             kakaoMemberRepository.save(kakaoMember);
