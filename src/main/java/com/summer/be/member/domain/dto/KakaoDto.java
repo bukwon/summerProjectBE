@@ -13,6 +13,6 @@ import static jakarta.persistence.EnumType.STRING;
 public class KakaoDto {
     private Long id;
     private String nickname;
-    private String profileImg;
+    //private String profileImg;
     private String email;
 }
