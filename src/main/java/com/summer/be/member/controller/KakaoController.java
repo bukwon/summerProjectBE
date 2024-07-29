@@ -36,6 +36,22 @@ public class KakaoController {
         // 2. 토큰 받기
         String accessToken = kakaoService.getAccessToken(code);
 
+        // 3. 사용자 저장
+        KakaoDto userInfo = kakaoService.getUserInfoAndSave(accessToken);
+
+        // 4. 프론트에 accessToken 전달
+        return accessToken;
+    }
+
+    //테스트용 코드이므로 주석처리
+    /*
+    @RequestMapping("/login/oauth2/code/kakao")
+    public String kakaoLogin(@RequestParam("code") String code) throws IOException {
+        // 1. 인가 코드 받기 (@RequestParam String code)
+
+        // 2. 토큰 받기
+        String accessToken = kakaoService.getAccessToken(code);
+
         // 3. 사용자 정보 받기
         KakaoDto userInfo = kakaoService.getUserInfo(accessToken);
 
@@ -48,14 +64,18 @@ public class KakaoController {
 
         return "redirect:/result";
     }
+    */
 
+    //프론트에서 처리 예정
+    /*
     @GetMapping("/kakaologin")
     public String loginForm(Model model){
-        /*kakaoService.kakaoMethod();
+        kakaoService.kakaoMethod();
         System.out.println(kakaoService.getKakaoApiKey());
         System.out.println(kakaoService.getKakaoRedirectUri());
         model.addAttribute("kakaoApiKey", kakaoService.getKakaoApiKey());
-        model.addAttribute("redirectUri", kakaoService.getKakaoRedirectUri());*/
+        model.addAttribute("redirectUri", kakaoService.getKakaoRedirectUri());
         return "login";
     }
+    */
 }
