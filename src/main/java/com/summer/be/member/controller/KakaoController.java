@@ -39,8 +39,8 @@ public class KakaoController {
         // 3. 사용자 저장
         KakaoDto userInfo = kakaoService.getUserInfoAndSave(accessToken);
 
-        // 4. 프론트에 accessToken 전달
-        return accessToken;
+        // 4. 프론트에 닉네임 전달 -> 현재는 닉네임 외 필요한 정보 없을 것으로 예상
+        return userInfo.getNickname();
     }
 
     //테스트용 코드이므로 주석처리
