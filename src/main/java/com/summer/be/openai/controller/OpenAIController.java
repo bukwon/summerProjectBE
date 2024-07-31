@@ -25,6 +25,7 @@ public class OpenAIController {
     @PostMapping("/getCompletion")
     public String getCompletion(@RequestParam("prompt") String prompt, Model model) {
         String completion = chatGptService.getCompletion(prompt);
+
         model.addAttribute("prompt", prompt);
         model.addAttribute("completion", completion);
         return "openai/result";
