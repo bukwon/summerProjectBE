@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class KakaoController {
             description = "회원가입에 성공하였습니다."
     )
     @RequestMapping("/login/oauth2/code/kakao")
-    public String kakaoLogin(@RequestParam("code") String code) throws IOException {
+    public ResponseEntity<?> kakaoLogin(@RequestParam("code") String code) throws IOException {
         // 1. 인가 코드 받기 (@RequestParam String code)
 
         // 2. 토큰 받기
@@ -40,7 +41,7 @@ public class KakaoController {
         KakaoDto userInfo = kakaoService.getUserInfoAndSave(accessToken);
 
         // 4. 프론트에 닉네임 전달 -> 현재는 닉네임 외 필요한 정보 없을 것으로 예상
-        return userInfo.getNickname();
+        return ResponseEntity.ok(userInfo.getNickname());
     }
 
     //테스트용 코드이므로 주석처리
