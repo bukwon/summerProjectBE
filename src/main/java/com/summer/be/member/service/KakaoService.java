@@ -88,7 +88,8 @@ public class KakaoService {
         return token;
     }
 
-    public KakaoDto getUserInfo(String accessToken) {
+    //toDo: 카카오 정보를 가져오는 것과 저장하는 것이 분리되어야 할 경우 수정
+    public KakaoDto getUserInfoAndSave(String accessToken) {
         String host = "https://kapi.kakao.com/v2/user/me";
         try {
             URL url = new URL(host);

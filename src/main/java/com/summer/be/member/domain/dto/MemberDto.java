@@ -10,5 +10,7 @@ import java.io.Serializable;
 @Value
 public class MemberDto implements Serializable {
     String email;
+    String nickname;
+
     String password;
 }
