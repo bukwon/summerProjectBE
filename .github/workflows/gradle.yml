@@ -30,10 +30,16 @@ jobs:
         distribution: 'temurin'
 
     #내가 수정한 부분
-    - name: Grant Execute Permission For Gradlew & Build gradle
+    - name: Grant Execute Permission For Gradlew
+      run: chmod +x gradlew
+        
+    - name: Use private.yml from secret
       run: |
-        chmod +x gradlew
-        ./gradlew build 
+        echo "${{ secrets.PRIVATE_YML_CONTENT }}" > private.yml
+        echo "private.yml created with secret content."
+        
+    - name: Build gradle
+      run: ./gradlew build 
     
     # DockerHub 로그인
     - name: docker login
