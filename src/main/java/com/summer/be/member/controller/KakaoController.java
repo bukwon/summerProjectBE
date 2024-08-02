@@ -23,14 +23,14 @@ public class KakaoController {
     private final KakaoService kakaoService;
 
     @Operation(
-            summary = "회원가입",
+            summary = "카카오 회원가입",
             description = "회원가입을 합니다."
     )
     @ApiResponse(
             responseCode = "200",
             description = "회원가입에 성공하였습니다."
     )
-    @RequestMapping("/login/oauth2/code/kakao")
+    @PostMapping("/login/oauth2/code/kakao") //수정: @RequestMapping -> @PostMapping
     public ResponseEntity<?> kakaoLogin(@RequestParam("code") String code) throws IOException {
         // 1. 인가 코드 받기 (@RequestParam String code)
 
