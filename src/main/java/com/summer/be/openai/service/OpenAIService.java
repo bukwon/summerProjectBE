@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 public class OpenAIService {
 
-    @Value("${openai.api.key}")
+    @Value("${openai.api.api-key}")
     private String openaiApiKey;
 
     private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";  // OpenAI 호출 URL
