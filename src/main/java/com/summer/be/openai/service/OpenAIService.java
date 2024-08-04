@@ -25,18 +25,18 @@ public class OpenAIService {
     private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";  // OpenAI 호출 URL
 
     public String getRecommendedPhrase() {
-        return getCompletion("Can you recommend a topic for daily English practice?");
+        return getCompletion("Can you recommend a topic for daily English practice?");  // 하루에 어떤 주제를 선정할지 추천해줍니다.
     }
 
     public List<String> getSentencesUsingPhrase(String phrase) {
-        String prompt = String.format("Generate 10 sentences using the topic '%s'.", phrase);
-        String response = getCompletion(prompt);
+        String prompt = String.format("Generate 10 sentences using the topic '%s'.", phrase);   // 생성된 주제를 통해 문장 10개를 생성합니다.
+        String response = getCompletion(prompt);    // openAI에 해당 프롬프트를 요청합니다.
 
-        String[] sentences = response.split("\n");
+        String[] sentences = response.split("\n");  // 받은 응답 값들을 배열에 저장
         List<String> sentenceList = new ArrayList<>();
         Collections.addAll(sentenceList, sentences);
 
-        return sentenceList;
+        return sentenceList;    // 10개 문장을 반환합니다.
     }
 
     private String getCompletion(String prompt) {
@@ -46,7 +46,7 @@ public class OpenAIService {
         headers.set("Content-Type", "application/json");
 
         Message userMessage = new Message("user", prompt);
-        OpenAIRequest request = new OpenAIRequest("ft:gpt-3.5-turbo-1106:personal::9sM8ENFu", Collections.singletonList(userMessage));
+        OpenAIRequest request = new OpenAIRequest("ft:gpt-3.5-turbo-1106:personal::9sM8ENFu", Collections.singletonList(userMessage));  // gpt-4o-mini 모델은 제한 사항이 있어 3.5-turbo 모델 기반으로 튜닝 작업 했습니다.
 
         try {
             HttpEntity<OpenAIRequest> entity = new HttpEntity<>(request, headers);
@@ -60,6 +60,6 @@ public class OpenAIService {
         } catch (Exception e) {
             e.printStackTrace();
             return "Error occurred: " + e.getMessage();
-        }
+        }   // http 요청, 응답 예외처리 추가
     }
 }
