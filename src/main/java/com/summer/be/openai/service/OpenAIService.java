@@ -12,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class OpenAIService {
@@ -22,27 +24,42 @@ public class OpenAIService {
 
     private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";  // OpenAI 호출 URL
 
-    public String getCompletion(String prompt) {
+    public String getRecommendedPhrase() {
+        return getCompletion("Can you recommend a topic for daily English practice?");
+    }
+
+    public List<String> getSentencesUsingPhrase(String phrase) {
+        String prompt = String.format("Generate 10 sentences using the topic '%s'.", phrase);
+        String response = getCompletion(prompt);
+
+        String[] sentences = response.split("\n");
+        List<String> sentenceList = new ArrayList<>();
+        Collections.addAll(sentenceList, sentences);
+
+        return sentenceList;
+    }
+
+    private String getCompletion(String prompt) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + openaiApiKey);
-        headers.set("Content-Type", "application/json");    // header Setting
+        headers.set("Content-Type", "application/json");
 
         Message userMessage = new Message("user", prompt);
-        OpenAIRequest request = new OpenAIRequest("gpt-4o-mini", Collections.singletonList(userMessage));   // body message, model 설정
+        OpenAIRequest request = new OpenAIRequest("ft:gpt-3.5-turbo-1106:personal::9sM8ENFu", Collections.singletonList(userMessage));
 
         try {
             HttpEntity<OpenAIRequest> entity = new HttpEntity<>(request, headers);
             ResponseEntity<OpenAIResponse> response = restTemplate.exchange(OPENAI_API_URL, HttpMethod.POST, entity, OpenAIResponse.class);
 
             if (response.getBody() != null && !response.getBody().getChoices().isEmpty()) {
-                return response.getBody().getChoices().get(0).getMessage().getContent(); // response 가 정상적으로 응답 했다면 내용 및 메세지 return
+                return response.getBody().getChoices().get(0).getMessage().getContent();
             } else {
                 return "No response from OpenAI.";
-            }   // 실패 시 에러 메시지
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return "Error occurred: " + e.getMessage();
         }
     }
 }
