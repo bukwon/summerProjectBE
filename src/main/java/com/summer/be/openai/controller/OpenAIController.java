@@ -2,31 +2,50 @@ package com.summer.be.openai.controller;
 
 
 import com.summer.be.openai.service.OpenAIService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
+@Tag(name = "OpenAI", description = "OpenAI 관련 API 입니다.")
 @Controller
-@RequestMapping("/openai")
+@CrossOrigin
+@Slf4j
+@RequestMapping("/api/openai")
 public class OpenAIController {
 
     @Autowired
-    private OpenAIService chatGptService;
+    private OpenAIService openAIService;
 
-    @GetMapping("/start")
+    /*@GetMapping("/start")
     public String index() {
         return "openai/index";
-    } // AI prompt 받을 창 메서드
+    } */// AI prompt 받을 창 메서드
 
-    @PostMapping("/getCompletion")
-    public String getCompletion(@RequestParam("prompt") String prompt, Model model) {
-        String completion = chatGptService.getCompletion(prompt);
-        model.addAttribute("prompt", prompt);
-        model.addAttribute("completion", completion);
-        return "openai/result";
-    }   // 결과 값 메서드
+    @Operation(
+            summary = "문장 생성",
+            description = "오늘의 추천 주제 기반으로 문장 10개를 생성합니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "문장 생성에 성공하였습니다."
+    )
+    @PostMapping("/getSentences")
+    public String getSentences(Model model) {
+        String recommendedPhrase = openAIService.getRecommendedPhrase();
+        log.info("my recommend phrase is " + "'" + recommendedPhrase + "'");
+        model.addAttribute("recommendedPhrase", recommendedPhrase);
+        List<String> sentences = openAIService.getSentencesUsingPhrase(recommendedPhrase);
+        model.addAttribute("phrase", recommendedPhrase);
+        model.addAttribute("sentences", sentences);
+        return "sentences";
+    }
 }
