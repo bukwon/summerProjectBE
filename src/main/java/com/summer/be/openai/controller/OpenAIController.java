@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -39,9 +40,10 @@ public class OpenAIController {
             description = "문장 생성에 성공하였습니다."
     )
     @PostMapping("/getSentences")
-    public List<String> getSentences(Model model) {
+    public ResponseEntity<?> getSentences(Model model) {
         String recommendedPhrase = openAIService.getRecommendedPhrase();
         log.info("my recommend phrase is " + "'" + recommendedPhrase + "'");
-        return openAIService.getSentencesUsingPhrase(recommendedPhrase);
+        List<String> sentences = openAIService.getSentencesUsingPhrase(recommendedPhrase);
+        return ResponseEntity.ok(sentences);
     }
 }
