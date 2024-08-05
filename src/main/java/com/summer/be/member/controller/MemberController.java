@@ -13,8 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @Tag(name = "User", description = "User 관련 API 입니다.")
 @RestController
 @RequiredArgsConstructor
@@ -80,5 +78,4 @@ public class MemberController {
             return ResponseEntity.ok().build();
         }
     }
-
 }
