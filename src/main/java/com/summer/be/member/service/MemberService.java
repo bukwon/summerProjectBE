@@ -1,6 +1,8 @@
 package com.summer.be.member.service;
 
+import com.summer.be.member.domain.KakaoMember;
 import com.summer.be.member.domain.Member;
+import com.summer.be.member.repository.KakaoMemberRepository;
 import com.summer.be.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,6 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final KakaoMemberRepository kakaoMemberRepository;
     private final PasswordEncoder passwordEncoder;
 
     public Member login(String email, String password) {
@@ -41,6 +44,8 @@ public class MemberService {
 
     public boolean checkEmail(String email) {
         Optional<Member> existingMember = memberRepository.findByEmail(email);
-        return existingMember.isPresent(); // 이메일이 존재하면 true, 아니면 false 반환
+        Optional<KakaoMember> existingKakaoMember = kakaoMemberRepository.findByEmail(email);
+        //KakaoMember와 Member 중 하나라도 존재하면 true, 아니면 false 반환
+        return existingMember.isPresent() || existingKakaoMember.isPresent();
     }
 }
