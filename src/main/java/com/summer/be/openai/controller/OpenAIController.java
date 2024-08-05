@@ -39,13 +39,9 @@ public class OpenAIController {
             description = "문장 생성에 성공하였습니다."
     )
     @PostMapping("/getSentences")
-    public String getSentences(Model model) {
+    public List<String> getSentences(Model model) {
         String recommendedPhrase = openAIService.getRecommendedPhrase();
         log.info("my recommend phrase is " + "'" + recommendedPhrase + "'");
-        model.addAttribute("recommendedPhrase", recommendedPhrase);
-        List<String> sentences = openAIService.getSentencesUsingPhrase(recommendedPhrase);
-        model.addAttribute("phrase", recommendedPhrase);
-        model.addAttribute("sentences", sentences);
-        return "sentences";
+        return openAIService.getSentencesUsingPhrase(recommendedPhrase);
     }
 }
