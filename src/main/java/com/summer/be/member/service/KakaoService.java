@@ -49,7 +49,7 @@ public class KakaoService {
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=").append(socialProperties.getKey());
             sb.append("&redirect_uri=").append(socialProperties.getRedirectUri());
-            sb.append("&code=" + code);
+            sb.append("&code=").append(code);
 
             bw.write(sb.toString());
             bw.flush();
@@ -63,20 +63,35 @@ public class KakaoService {
                 br = new BufferedReader(new InputStreamReader(urlConnection.getErrorStream()));
             }
 
-            String line = "";
-            String result = "";
+            String line;
+            StringBuilder result = new StringBuilder();
             while ((line = br.readLine()) != null) {
-                result += line;
+                result.append(line);
             }
 
             // json parsing
             JSONParser parser = new JSONParser();
-            JSONObject elem = (JSONObject) parser.parse(result);
+            JSONObject elem = (JSONObject) parser.parse(result.toString());
 
-            String access_token = elem.get("access_token").toString();
-            String refresh_token = elem.get("refresh_token").toString();
+            // null 체크 추가
+            Object accessTokenObj = elem.get("access_token");
+            Object refreshTokenObj = elem.get("refresh_token");
 
-            token = access_token;
+            if (accessTokenObj != null) {
+                String access_token = accessTokenObj.toString();
+                token = access_token;
+            } else {
+                // access_token이 null인 경우 처리
+                log.info("access_token이 응답에 포함되어 있지 않습니다: " + result);
+            }
+
+            if (refreshTokenObj != null) {
+                String refresh_token = refreshTokenObj.toString();
+                // refresh_token을 사용하여 필요한 로직 추가
+            } else {
+                // refresh_token이 null인 경우 처리
+                log.info("refresh_token이 응답에 포함되어 있지 않습니다: " + result);
+            }
 
             br.close();
             bw.close();
