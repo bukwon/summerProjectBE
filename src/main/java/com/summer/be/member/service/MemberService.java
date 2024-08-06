@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,5 +48,9 @@ public class MemberService {
         Optional<KakaoMember> existingKakaoMember = kakaoMemberRepository.findByEmail(email);
         //KakaoMember와 Member 중 하나라도 존재하면 true, 아니면 false 반환
         return existingMember.isPresent() || existingKakaoMember.isPresent();
+    }
+
+    public List<Member> findAll() {
+        return memberRepository.findAll();
     }
 }
