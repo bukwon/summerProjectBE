@@ -10,8 +10,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "User", description = "User 관련 API 입니다.")
 @RestController
@@ -77,5 +80,22 @@ public class MemberController {
             log.info("Email is available: " + email);
             return ResponseEntity.ok().build();
         }
+    }
+
+    @Operation(
+            summary = "Apache Test",
+            description = "Test about Apache"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Success of Apache"
+    )
+    @GetMapping("/apache-test")
+    public ResponseEntity<?> apacheTest() {
+        List<Member> findEmail = memberService.findAll();
+        if (findEmail.isEmpty()) {
+            log.info("회원정보가 비어있습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No members found");
+        } else return ResponseEntity.ok(findEmail);
     }
 }
