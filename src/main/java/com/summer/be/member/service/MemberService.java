@@ -1,11 +1,9 @@
 package com.summer.be.member.service;
 
-import com.summer.be.member.domain.KakaoMember;
+import com.summer.be.member.domain.EnglishLevel;
 import com.summer.be.member.domain.Member;
-import com.summer.be.member.repository.KakaoMemberRepository;
 import com.summer.be.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,37 +13,30 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final KakaoMemberRepository kakaoMemberRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final EnglishLevel defaultLevel = EnglishLevel.BEGINNER;
 
-    public Member login(String email, String password) {
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
-
-        if (!passwordEncoder.matches(password, member.getPassword())) {
-            throw new IllegalArgumentException("Invalid email or password");
-        }
+    public Member login(String kakaoAccountId) {
+        Member member = memberRepository.findByKakaoAccountId(kakaoAccountId)
+                .orElseThrow(() -> new IllegalArgumentException("KaKaoAccountId not found"));
 
         return member;
     }
 
     @Transactional
-    public void signUp(String email, String nickname, String password) {
-        memberRepository.findByEmail(email)
+    public Member signUp(String kakaoAccountId) {
+        memberRepository.findByKakaoAccountId(kakaoAccountId)
                 .ifPresent(member -> {
-                    throw new IllegalArgumentException("Email already exists");
+                    throw new IllegalArgumentException("KaKaoAccountId already exists");
                 });
-        memberRepository.save(Member.builder()
-                .email(email)
-                .nickname(nickname)
-                .password(passwordEncoder.encode(password))
-                .build());
+
+        Member member = Member.builder()
+                .kakaoAccountId(kakaoAccountId) //kakaoAccountId로 Member 생성
+                .level(defaultLevel)
+                .build();
+
+        memberRepository.save(member);
+
+        return member;
     }
 
-    public boolean checkEmail(String email) {
-        Optional<Member> existingMember = memberRepository.findByEmail(email);
-        Optional<KakaoMember> existingKakaoMember = kakaoMemberRepository.findByEmail(email);
-        //KakaoMember와 Member 중 하나라도 존재하면 true, 아니면 false 반환
-        return existingMember.isPresent() || existingKakaoMember.isPresent();
-    }
 }
