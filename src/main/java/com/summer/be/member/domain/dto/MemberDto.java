@@ -1,5 +1,7 @@
 package com.summer.be.member.domain.dto;
 
+import com.summer.be.member.domain.EnglishLevel;
+import jakarta.validation.constraints.NotNull;
 import lombok.Value;
 
 import java.io.Serializable;
@@ -9,6 +11,8 @@ import java.io.Serializable;
  */
 @Value
 public class MemberDto implements Serializable {
-    String email;
-    String password;
+    @NotNull
+    String kakaoAccountId;
+    @NotNull
+    EnglishLevel level;
 }

@@ -30,10 +30,16 @@ jobs:
         distribution: 'temurin'
 
     #내가 수정한 부분
-    - name: Grant Execute Permission For Gradlew & Build gradle
+    - name: Grant Execute Permission For Gradlew
+      run: chmod +x gradlew
+        
+    - name: Use private.yml from secret
       run: |
-        chmod +x gradlew
-        ./gradlew build 
+        echo "${{ secrets.PRIVATE_YML_CONTENT }}" > src/main/resources/private.yml
+        echo "private.yml created with secret content."
+        
+    - name: Build gradle
+      run: ./gradlew build 
     
     # DockerHub 로그인
     - name: docker login
@@ -88,11 +94,11 @@ jobs:
         username: ${{secrets.GCP_USERNAME}}
         key: ${{secrets.GCP_PRIVATEKEY}}  
         script: |
-          sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
-          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/speech
-          sudo docker rm -f $(docker ps -qa) 2>/dev/null || true
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/speech
+          docker rm -f $(docker ps -qa) 2>/dev/null || true
           cd /home/${{secrets.GCP_USERNAME}}
-          sudo docker-compose up -d
-          sudo docker image prune -f
+          docker-compose up -d
+          docker image prune -f
 
   

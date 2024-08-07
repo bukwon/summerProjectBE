@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Objects;
-
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -17,13 +15,36 @@ public class Member {
     private Long id;
 
     @Column(nullable = false)
+    private String kakaoAccountId;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private EnglishLevel level;
+
+    @Builder
+    public Member(String kakaoAccountId, EnglishLevel level) {
+        this.kakaoAccountId = kakaoAccountId;
+        this.level = level;
+    }
+
+    public void changeLevel(EnglishLevel level) {
+        this.level = level;
+    }
+}
+
+    /*
+    @Column(nullable = false)
+    private String nickname;
+
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
     private String password;
 
     @Builder
-    public Member(String email, String password) {
+    public Member(String nickname, String email, String password) {
+        this.nickname = nickname;
         this.email = email;
         this.password = password;
     }
@@ -32,4 +53,4 @@ public class Member {
     public int hashCode() {
         return Objects.hash(getPassword());
     }
-}
+    */

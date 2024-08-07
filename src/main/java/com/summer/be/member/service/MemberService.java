@@ -1,5 +1,6 @@
 package com.summer.be.member.service;
 
+import com.summer.be.member.domain.EnglishLevel;
 import com.summer.be.member.domain.Member;
 import com.summer.be.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,27 +13,30 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final EnglishLevel defaultLevel = EnglishLevel.BEGINNER;
 
-    public void login(String email, String password) {
-        memberRepository.findByEmail(email)
-                .filter(member -> member.getPassword().equals(password))
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+    public Member login(String kakaoAccountId) {
+        Member member = memberRepository.findByKakaoAccountId(kakaoAccountId)
+                .orElseThrow(() -> new IllegalArgumentException("KaKaoAccountId not found"));
+
+        return member;
     }
 
     @Transactional
-    public void signUp(String email, String password) {
-        memberRepository.findByEmail(email)
+    public Member signUp(String kakaoAccountId) {
+        memberRepository.findByKakaoAccountId(kakaoAccountId)
                 .ifPresent(member -> {
-                    throw new IllegalArgumentException("Email already exists");
+                    throw new IllegalArgumentException("KaKaoAccountId already exists");
                 });
-        memberRepository.save(Member.builder()
-                .email(email)
-                .password(password)
-                .build());
+
+        Member member = Member.builder()
+                .kakaoAccountId(kakaoAccountId) //kakaoAccountId로 Member 생성
+                .level(defaultLevel)
+                .build();
+
+        memberRepository.save(member);
+
+        return member;
     }
 
-    public boolean checkEmail(String email) {
-        Optional<Member> existingMember = memberRepository.findByEmail(email);
-        return existingMember.isPresent(); // 이메일이 존재하면 true, 아니면 false 반환
-    }
 }
