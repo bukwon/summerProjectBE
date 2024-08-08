@@ -1,9 +1,13 @@
 package com.summer.be.openai.service;
 
 
+import com.summer.be.openai.dao.OpenAIRepository;
 import com.summer.be.openai.dto.Message;
+import com.summer.be.openai.dto.OpenAIDto;
 import com.summer.be.openai.dto.OpenAIRequest;
 import com.summer.be.openai.dto.OpenAIResponse;
+import com.summer.be.openai.entity.OpenAI;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,12 +21,14 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class OpenAIService {
 
     @Value("${openai.api.api-key}")
     private String openaiApiKey;
 
     private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";  // OpenAI 호출 URL
+    private final OpenAIRepository openAIRepository;
 
     public String getRecommendedPhrase() {
         return getCompletion("Can you recommend a topic for daily English practice?");  // 하루에 어떤 주제를 선정할지 추천해줍니다.
@@ -35,6 +41,10 @@ public class OpenAIService {
         String[] sentences = response.split("\n");  // 받은 응답 값들을 배열에 저장
         List<String> sentenceList = new ArrayList<>();
         Collections.addAll(sentenceList, sentences);
+
+        OpenAIDto openAIDto = new OpenAIDto(phrase, sentenceList);
+        OpenAI openAI = openAIDto.toEntity();
+        openAIRepository.save(openAI);
 
         return sentenceList;    // 10개 문장을 반환합니다.
     }
