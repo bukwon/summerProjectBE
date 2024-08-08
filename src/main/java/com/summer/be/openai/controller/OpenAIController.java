@@ -42,10 +42,15 @@ public class OpenAIController {
     @PostMapping("/saveLearnings")
     public ResponseEntity<?> saveLearnings(Model model) {
         String recommendedPhrase = openAIService.getRecommendedPhrase();
-        log.info("my recommend phrase is " + "'" + recommendedPhrase + "'");
         List<String> sentences = openAIService.getSentencesUsingPhrase(recommendedPhrase);
         List<String> voca = openAIService.getVocabularyUsingPhrase(recommendedPhrase);
-        openAIService.saveLearning(recommendedPhrase, sentences, voca);
-        return ResponseEntity.ok().build();
+        log.info("my recommend phrase is " + "'" + recommendedPhrase + "'");
+        try {
+            openAIService.saveLearning(recommendedPhrase, sentences, voca);
+            return ResponseEntity.ok().build();
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
