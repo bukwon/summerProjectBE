@@ -35,18 +35,25 @@ public class OpenAIService {
     }
 
     public List<String> getSentencesUsingPhrase(String phrase) {
-        String prompt = String.format("Generate 2 sentences using the topic '%s'.", phrase);   // 생성된 주제를 통해 문장 10개를 생성합니다. (정식적으로 완료 되기 전 까지 2개 유지)
-        String response = getCompletion(prompt);    // openAI에 해당 프롬프트를 요청합니다.
+        String prompt = String.format("Generate 2 sentences using the topic '%s'.", phrase);
+        String response = getCompletion(prompt);
 
-        String[] sentences = response.split("\n");  // 받은 응답 값들을 배열에 저장
+        String[] sentences = response.split("\n");
         List<String> sentenceList = new ArrayList<>();
         Collections.addAll(sentenceList, sentences);
 
-        OpenAIDto openAIDto = new OpenAIDto(phrase, sentenceList);
-        OpenAI openAI = openAIDto.toEntity();
-        openAIRepository.save(openAI);
+        return sentenceList;
+    }
 
-        return sentenceList;    // 10개 문장을 반환합니다. (비용 최소화 위해 2개만 생성하겠습니다)
+    public List<String> getVocabularyUsingPhrase(String phrase) {
+        String prompt = String.format("Generate 2 vocabularies using the topic '%s'.", phrase);
+        String response = getCompletion(prompt);
+
+        String[] vocabulary = response.split("\n");
+        List<String> vocaList = new ArrayList<>();
+        Collections.addAll(vocaList, vocabulary);
+
+        return vocaList;
     }
 
     private String getCompletion(String prompt) {
@@ -71,5 +78,11 @@ public class OpenAIService {
             e.printStackTrace();
             return "Error occurred: " + e.getMessage();
         }   // http 요청, 응답 예외처리 추가
+    }
+
+    public void saveLearning(String recommendedPhrase, List<String> sentences, List<String> voca) {
+        OpenAIDto openAIDto = new OpenAIDto(recommendedPhrase, sentences, voca);
+        OpenAI openAI = openAIDto.toEntity();
+        openAIRepository.save(openAI);
     }
 }

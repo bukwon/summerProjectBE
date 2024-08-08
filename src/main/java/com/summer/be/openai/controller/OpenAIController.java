@@ -44,6 +44,8 @@ public class OpenAIController {
         String recommendedPhrase = openAIService.getRecommendedPhrase();
         log.info("my recommend phrase is " + "'" + recommendedPhrase + "'");
         List<String> sentences = openAIService.getSentencesUsingPhrase(recommendedPhrase);
-        return ResponseEntity.ok(sentences);
+        List<String> voca = openAIService.getVocabularyUsingPhrase(recommendedPhrase);
+        openAIService.saveLearning(recommendedPhrase, sentences, voca);
+        return ResponseEntity.ok().build();
     }
 }

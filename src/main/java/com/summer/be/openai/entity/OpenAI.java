@@ -20,4 +20,7 @@ public class OpenAI {
 
     @Column(name = "English-sentence", columnDefinition = "LONGTEXT")
     private String sentences;
+
+    @Column(name = "English-vocabulary")
+    private String vocabulary;
 }
