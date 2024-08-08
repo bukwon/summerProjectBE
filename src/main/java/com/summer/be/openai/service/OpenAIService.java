@@ -35,7 +35,7 @@ public class OpenAIService {
     }
 
     public List<String> getSentencesUsingPhrase(String phrase) {
-        String prompt = String.format("Generate 10 sentences using the topic '%s'.", phrase);   // 생성된 주제를 통해 문장 10개를 생성합니다.
+        String prompt = String.format("Generate 2 sentences using the topic '%s'.", phrase);   // 생성된 주제를 통해 문장 10개를 생성합니다. (정식적으로 완료 되기 전 까지 2개 유지)
         String response = getCompletion(prompt);    // openAI에 해당 프롬프트를 요청합니다.
 
         String[] sentences = response.split("\n");  // 받은 응답 값들을 배열에 저장
@@ -46,7 +46,7 @@ public class OpenAIService {
         OpenAI openAI = openAIDto.toEntity();
         openAIRepository.save(openAI);
 
-        return sentenceList;    // 10개 문장을 반환합니다.
+        return sentenceList;    // 10개 문장을 반환합니다. (비용 최소화 위해 2개만 생성하겠습니다)
     }
 
     private String getCompletion(String prompt) {
