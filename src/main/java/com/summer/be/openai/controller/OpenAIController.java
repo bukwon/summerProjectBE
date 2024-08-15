@@ -54,9 +54,6 @@ public class OpenAIController {
             responseCode = "200",
             description = "문장 생성에 성공하였습니다."
     )
-    public List<OpenAIDto> getAllOpenAI() {
-        return openAIService.getAllOpenAI();
-    }
     @PostMapping("/saveLearnings")
     public ResponseEntity<?> saveLearnings(Model model) {
         String recommendedPhrase = openAIService.getRecommendedPhrase();
