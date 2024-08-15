@@ -1,6 +1,7 @@
 package com.summer.be.openai.controller;
 
 
+import com.summer.be.openai.dto.OpenAIDto;
 import com.summer.be.openai.service.OpenAIService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -32,6 +34,19 @@ public class OpenAIController {
     } */// AI prompt 받을 창 메서드
 
     @Operation(
+            summary = "학습 자료 가져오기",
+            description = "오늘의 추천 기반으로 문장과 보카 학습 가져옵니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "학습 자료 get에 성공하셨습니다."
+    )
+    @GetMapping("/getLearnings")
+    public List<OpenAIDto> getLearnings() {
+        return openAIService.getAllOpenAI();
+    }
+
+    @Operation(
             summary = "문장 생성",
             description = "오늘의 추천 주제 기반으로 문장 10개를 생성합니다."
     )
@@ -39,6 +54,9 @@ public class OpenAIController {
             responseCode = "200",
             description = "문장 생성에 성공하였습니다."
     )
+    public List<OpenAIDto> getAllOpenAI() {
+        return openAIService.getAllOpenAI();
+    }
     @PostMapping("/saveLearnings")
     public ResponseEntity<?> saveLearnings(Model model) {
         String recommendedPhrase = openAIService.getRecommendedPhrase();
