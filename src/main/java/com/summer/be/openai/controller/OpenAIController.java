@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,6 +29,20 @@ public class OpenAIController {
     public String index() {
         return "openai/index";
     } */// AI prompt 받을 창 메서드
+
+    @Operation(
+            summary = "get 연습용",
+            description = "only test"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "get에 성공하셨습니다."
+    )
+    @ResponseBody
+    @GetMapping("/onlyTest")
+    public String getTest() {
+        return "test";
+    }
 
     @Operation(
             summary = "학습 자료 가져오기",
