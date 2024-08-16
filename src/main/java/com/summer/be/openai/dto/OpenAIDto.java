@@ -6,8 +6,7 @@ import lombok.*;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -27,5 +26,17 @@ public class OpenAIDto {
                 .vocabulary(vocaJson)
                 .build();
         return openAI;
+    }
+
+    public static OpenAIDto fromEntity(OpenAI openAI) {
+        Gson gson = new Gson();
+        List<String> sentencesList = gson.fromJson(openAI.getSentences(), List.class);
+        List<String> vocabularyList = gson.fromJson(openAI.getVocabulary(), List.class);
+
+        return new OpenAIDto(
+                openAI.getTopic(),
+                sentencesList,
+                vocabularyList
+        );
     }
 }

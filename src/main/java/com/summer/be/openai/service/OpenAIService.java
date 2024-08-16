@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -84,5 +85,12 @@ public class OpenAIService {
         OpenAIDto openAIDto = new OpenAIDto(recommendedPhrase, sentences, voca);
         OpenAI openAI = openAIDto.toEntity();
         openAIRepository.save(openAI);
+    }
+
+    public List<OpenAIDto> getAllOpenAI() {
+        List<OpenAI> openAIList = openAIRepository.findAll();
+        return openAIList.stream()
+                .map(OpenAIDto::fromEntity) // 엔티티에서 DTO로 변환하는 용도입니다.
+                .collect(Collectors.toList());
     }
 }
