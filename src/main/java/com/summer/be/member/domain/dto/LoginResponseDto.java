@@ -10,10 +10,13 @@ import lombok.NoArgsConstructor;
 public class LoginResponseDto {
     String englishLevel;
     String accessToken;
+    String refreshToken;
 
     @Builder
-    public LoginResponseDto(String englishLevel, String accessToken) {
+    public LoginResponseDto(String englishLevel, String accessToken, String refreshToken) {
         this.englishLevel = englishLevel;
         this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+
     }
 }
