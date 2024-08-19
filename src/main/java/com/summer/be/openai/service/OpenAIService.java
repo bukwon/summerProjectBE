@@ -81,10 +81,11 @@ public class OpenAIService {
         }   // http 요청, 응답 예외처리 추가
     }
 
-    public void saveLearning(String recommendedPhrase, List<String> sentences, List<String> voca) {
+    public OpenAI saveLearning(String recommendedPhrase, List<String> sentences, List<String> voca) {
         OpenAIDto openAIDto = new OpenAIDto(recommendedPhrase, sentences, voca);
         OpenAI openAI = openAIDto.toEntity();
         openAIRepository.save(openAI);
+        return openAI;
     }
 
     public List<OpenAIDto> getAllOpenAI() {
