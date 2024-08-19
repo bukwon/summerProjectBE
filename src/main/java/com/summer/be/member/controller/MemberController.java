@@ -3,7 +3,9 @@ package com.summer.be.member.controller;
 import com.summer.be.member.domain.Member;
 import com.summer.be.member.domain.dto.KakaoAccountIdDto;
 import com.summer.be.member.domain.dto.LoginResponseDto;
+import com.summer.be.member.domain.dto.TokenRequestDto;
 import com.summer.be.member.service.MemberService;
+import com.summer.be.security.jwt.AuthTokens;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -55,5 +57,19 @@ public class MemberController {
             log.info("회원정보가 비어있습니다.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No members found");
         } else return ResponseEntity.ok(findEmail);
+    }
+
+    @Operation(
+            summary = "토큰 재발급",
+            description = "Access Token과 Refresh Token을 이용하여 새로운 Access Token을 발급합니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "토큰 재발급에 성공하였습니다."
+    )
+
+    @PostMapping("/reissue")
+    public ResponseEntity<AuthTokens> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
+        return ResponseEntity.ok(memberService.reissue(tokenRequestDto));
     }
 }
