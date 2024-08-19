@@ -2,6 +2,7 @@ package com.summer.be.openai.controller;
 
 
 import com.summer.be.openai.dto.OpenAIDto;
+import com.summer.be.openai.entity.OpenAI;
 import com.summer.be.openai.service.OpenAIService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Tag(name = "OpenAI", description = "OpenAI 관련 API 입니다.")
-@Controller
+@RestController
 @CrossOrigin
 @Slf4j
 @RequestMapping("/api/openai")
@@ -24,11 +25,6 @@ public class OpenAIController {
 
     @Autowired
     private OpenAIService openAIService;
-
-    /*@GetMapping("/start")
-    public String index() {
-        return "openai/index";
-    } */// AI prompt 받을 창 메서드
 
     @Operation(
             summary = "get 연습용",
@@ -66,17 +62,12 @@ public class OpenAIController {
             description = "문장 생성에 성공하였습니다."
     )
     @PostMapping("/saveLearnings")
-    public ResponseEntity<?> saveLearnings(Model model) {
+    public OpenAI saveLearnings() {
         String recommendedPhrase = openAIService.getRecommendedPhrase();
         List<String> sentences = openAIService.getSentencesUsingPhrase(recommendedPhrase);
         List<String> voca = openAIService.getVocabularyUsingPhrase(recommendedPhrase);
         log.info("my recommend phrase is " + "'" + recommendedPhrase + "'");
-        try {
-            openAIService.saveLearning(recommendedPhrase, sentences, voca);
-            return ResponseEntity.ok().build();
-        }
-        catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        OpenAI openAI = openAIService.saveLearning(recommendedPhrase, sentences, voca);
+        return openAI;
     }
 }
