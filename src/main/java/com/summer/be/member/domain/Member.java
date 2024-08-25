@@ -21,10 +21,15 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private EnglishLevel level;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
+
     @Builder
-    public Member(String kakaoAccountId, EnglishLevel level) {
+    public Member(String kakaoAccountId, EnglishLevel level, Authority authority) {
         this.kakaoAccountId = kakaoAccountId;
         this.level = level;
+        this.authority = authority;
     }
 
     public void changeLevel(EnglishLevel level) {
