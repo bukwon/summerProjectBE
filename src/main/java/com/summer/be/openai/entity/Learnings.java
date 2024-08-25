@@ -3,16 +3,16 @@ package com.summer.be.openai.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Data
-@Table(name = "OpenAI")
+@Table(name = "Learnings")
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 @Builder
-public class OpenAI {
+public class Learnings {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,9 +20,11 @@ public class OpenAI {
     @Column(name = "topic", columnDefinition = "LONGTEXT", nullable = false)
     private String topic;
 
-    @Column(name = "English-sentence", columnDefinition = "LONGTEXT")
-    private String sentences;
+    @OneToOne(mappedBy = "learnings", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Sentences sentences;
 
-    @Column(name = "English-vocabulary", columnDefinition = "LONGTEXT")
-    private String vocabulary;
+    @OneToOne(mappedBy = "learnings", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Vocabulary vocabulary;
+
+    private int status;
 }
