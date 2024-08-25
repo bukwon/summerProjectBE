@@ -1,6 +1,7 @@
 package com.summer.be.openai.dto;
 
-import com.openai.openai.entity.Learnings;
+
+import com.summer.be.openai.entity.Learnings;
 import lombok.*;
 
 @Getter

@@ -1,7 +1,7 @@
 package com.summer.be.openai.dto;
 
 import com.google.gson.Gson;
-import com.openai.openai.entity.Sentences;
+import com.summer.be.openai.entity.Sentences;
 import lombok.*;
 
 import java.util.List;
