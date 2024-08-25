@@ -67,7 +67,7 @@ public class OpenAIService {
         headers.set("Content-Type", "application/json");
 
         Message userMessage = new Message("user", prompt);
-        OpenAIRequest request = new OpenAIRequest("ft:gpt-3.5-turbo-1106:personal::9sM8ENFu", Collections.singletonList(userMessage));  // gpt-4o-mini 모델은 제한 사항이 있어 3.5-turbo 모델 기반으로 튜닝 작업 했습니다.
+        OpenAIRequest request = new OpenAIRequest("ft:gpt-4o-mini-2024-07-18:personal::9zfcDZXf", Collections.singletonList(userMessage));  // gpt-4o-mini 모델은 제한 사항이 있어 3.5-turbo 모델 기반으로 튜닝 작업 했습니다.
 
         try {
             HttpEntity<OpenAIRequest> entity = new HttpEntity<>(request, headers);
