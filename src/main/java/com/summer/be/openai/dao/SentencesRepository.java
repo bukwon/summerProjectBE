@@ -1,10 +1,9 @@
 package com.summer.be.openai.dao;
 
-
-import com.summer.be.openai.entity.OpenAI;
+import com.summer.be.openai.entity.Sentences;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OpenAIRepository extends JpaRepository<OpenAI, Long> {
+public interface SentencesRepository extends JpaRepository<Sentences, Long> {
 }
