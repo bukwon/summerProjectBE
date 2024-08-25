@@ -1,6 +1,7 @@
 package com.summer.be.openai.controller;
 
 
+import com.summer.be.openai.entity.Learnings;
 import com.summer.be.openai.service.OpenAIService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,20 +23,6 @@ public class OpenAIController {
     private OpenAIService openAIService;
 
     @Operation(
-            summary = "get 연습용",
-            description = "only test"
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "get에 성공하셨습니다."
-    )
-    @ResponseBody
-    @GetMapping("/onlyTest")
-    public String getTest() {
-        return "test";
-    }
-
-    @Operation(
             summary = "문장 생성",
             description = "오늘의 추천 주제 기반으로 문장 10개를 생성합니다."
     )
@@ -50,9 +37,9 @@ public class OpenAIController {
         List<String> sentences = openAIService.getSentencesUsingPhrase(recommendedPhrase);
         List<String> voca = openAIService.getVocabularyUsingPhrase(recommendedPhrase);
         log.info("my recommend phrase is " + "'" + recommendedPhrase + "'");
-        openAIService.saveLearning(recommendedPhrase);
-        openAIService.saveVoca(voca);
-        openAIService.saveSentences(sentences);
+        Learnings learnings = openAIService.saveLearning(recommendedPhrase);
+        openAIService.saveVoca(voca, learnings);
+        openAIService.saveSentences(sentences, learnings);
 
         return "ok";
     }

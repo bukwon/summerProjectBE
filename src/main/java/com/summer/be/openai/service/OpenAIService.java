@@ -84,20 +84,22 @@ public class OpenAIService {
         }   // http 요청, 응답 예외처리 추가
     }
 
-    public void saveLearning(String recommendedPhrase) {
+    public Learnings saveLearning(String recommendedPhrase) {
         LearningsDto learningsDto = new LearningsDto(recommendedPhrase);
         Learnings learnings = learningsDto.toEntity();
         learningsRepository.save(learnings);
+
+        return learnings;
     }
 
-    public void saveVoca(List<String> voca) {
-        VocabularyDto vocabularyDto = new VocabularyDto(voca);
+    public void saveVoca(List<String> voca, Learnings learnings) {
+        VocabularyDto vocabularyDto = new VocabularyDto(voca, learnings);
         Vocabulary saveVoca = vocabularyDto.toEntity();
         vocabularyRepository.save(saveVoca);
     }
 
-    public void saveSentences(List<String> sentences) {
-        SentencesDto sentencesDto = new SentencesDto(sentences);
+    public void saveSentences(List<String> sentences, Learnings learnings) {
+        SentencesDto sentencesDto = new SentencesDto(sentences, learnings);
         Sentences saveSentences = sentencesDto.toEntity();
         sentencesRepository.save(saveSentences);
     }
