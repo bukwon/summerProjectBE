@@ -3,7 +3,7 @@ package com.summer.be.member.controller;
 import com.summer.be.member.domain.Member;
 import com.summer.be.member.domain.dto.KakaoAccountIdDto;
 import com.summer.be.member.domain.dto.LoginResponseDto;
-import com.summer.be.member.domain.dto.TokenRequestDto;
+import com.summer.be.member.domain.dto.TokenRequestAndResponseDto;
 import com.summer.be.member.service.MemberService;
 import com.summer.be.security.jwt.AuthTokens;
 import io.swagger.v3.oas.annotations.Operation;
@@ -69,7 +69,15 @@ public class MemberController {
     )
 
     @PostMapping("/reissue")
-    public ResponseEntity<AuthTokens> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
-        return ResponseEntity.ok(memberService.reissue(tokenRequestDto));
+    public ResponseEntity<TokenRequestAndResponseDto> reissue(@RequestBody TokenRequestAndResponseDto tokenRequestDto) {
+        AuthTokens authTokens = memberService.reissue(tokenRequestDto);
+
+        TokenRequestAndResponseDto tokenRequestAndResponseDto = TokenRequestAndResponseDto.builder()
+                .accessToken(authTokens.getAccessToken())
+                .refreshToken(authTokens.getRefreshToken())
+                .build();
+
+        return ResponseEntity.ok(tokenRequestAndResponseDto);
+        //return ResponseEntity.ok(memberService.reissue(tokenRequestDto));
     }
 }

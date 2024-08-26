@@ -1,11 +1,11 @@
 package com.summer.be.security.handler;
 
-import com.summer.be.member.domain.Authority;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,11 +23,13 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class JwtTokenProvider {
+    private final RedisTemplate<String, String> redisTemplate;
     private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
     private static final String AUTHORITIES_KEY = "auth";
     private static Key key;
 
-    public JwtTokenProvider(@Value("${custom.jwt.secretKey}") String secretKey) {
+    public JwtTokenProvider(@Value("${custom.jwt.secretKey}") String secretKey, RedisTemplate<String, String> redisTemplate) {
+        this.redisTemplate = redisTemplate;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
@@ -36,8 +38,16 @@ public class JwtTokenProvider {
         return generateToken(subject, expiredAt);
     }
 
-    public String refreshTokenGenerate(Date expiredAt) {
-        return generateToken(null, expiredAt);
+    public String refreshTokenGenerate(String subject, Date expiredAt) {
+        String refreshToken = generateToken(null, expiredAt);
+        redisTemplate.opsForValue().set(
+                subject,
+                refreshToken,
+                expiredAt.getTime() - System.currentTimeMillis(),
+                java.util.concurrent.TimeUnit.MILLISECONDS
+        );
+
+        return refreshToken;
     }
 
     private String generateToken(String subject, Date expiredAt) {
